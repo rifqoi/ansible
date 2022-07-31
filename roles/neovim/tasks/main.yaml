@@ -1,0 +1,15 @@
+- name: Enable copr in Fedora distro
+  community.general.copr:
+    host: copr.fedorainfracloud.org
+    name: agriffis/neovim-nightly
+    state: enabled
+  become: yes
+  when: ansible_facts['distribution'] == "Fedora"
+
+- name: Install or update neovim
+  ansible.builtin.package:
+    name: neovim
+    state: latest
+  become: yes
+  tags:
+    - install
