@@ -1,0 +1,37 @@
+---
+- name: Install git
+  ansible.builtin.package:
+    name: git
+    state: latest
+  become: yes
+
+- name: Set diff.colorMoved
+  community.general.git_config:
+    name: diff.colorMoved
+    scope: global
+    value: zebra
+
+- name: Set fetch.prune
+  community.general.git_config:
+    name: fetch.prune
+    scope: global
+    value: true
+
+- name: Set init.defaultBranch
+  community.general.git_config:
+    name: init.defaultBranch
+    scope: global
+    value: main
+
+- name: Set user.email
+  community.general.git_config:
+    name: user.email
+    scope: global
+    value: "{{ git_user_email }}"
+  no_log: true
+
+- name: Set user.name
+  community.general.git_config:
+    name: user.name
+    scope: global
+    value: "{{ git_user_name }}"
