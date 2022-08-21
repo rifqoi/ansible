@@ -6,6 +6,21 @@
   become: yes
   when: ansible_facts['distribution'] == "Fedora"
 
+- name: Add neovim ppa in ubuntu
+  ansible.builtin.command:
+    argv:
+      - sudo
+      - add-apt-repository
+      - ppa:neovim-ppa/unstable
+      - -y
+  when: ansible_facts['distribution'] == "Ubuntu"
+
+- name: Apt-get update
+  ansible.builtin.apt:
+    upgrade: yes
+    update_cache: yes
+  when: ansible_facts['distribution'] == "Ubuntu"
+
 - name: Install or update neovim
   ansible.builtin.package:
     name: neovim
@@ -29,12 +44,4 @@
 
 - name: run :PackerSync
   ansible.builtin.command:
-    argv:
-      - nvim
-      - -u
-      - "{{ ansible_user_dir }}/.config/nvim/lua/packer_nvim.lua"
-      - --headless
-      - -c
-      - "'autocmd User PackerComplete quitall'"
-      - -c
-      - "'PackerSync'"
+    cmd: nvim -u ~/.config/nvim/lua/packer_nvim.lua --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
