@@ -13,3 +13,28 @@
   become: yes
   tags:
     - install
+
+- name: Clone packer.nvim to neovim packpath
+  ansible.builtin.git:
+    clone: yes
+    depth: 1
+    dest: "{{ ansible_user_dir }}/.local/share/nvim/site/pack/packer/start/packer.nvim"
+    repo: https://github.com/wbthomason/packer.nvim
+
+- name: Clone the nvim dotfiles
+  ansible.builtin.git:
+    clone: yes
+    dest: "{{ ansible_user_dir }}/.config/nvim"
+    repo: https://github.com/rifqoi/nvim
+
+- name: run :PackerSync
+  ansible.builtin.command:
+    argv:
+      - nvim
+      - -u
+      - "{{ ansible_user_dir }}/.config/nvim/lua/packer_nvim.lua"
+      - --headless
+      - -c
+      - "'autocmd User PackerComplete quitall'"
+      - -c
+      - "'PackerSync'"
