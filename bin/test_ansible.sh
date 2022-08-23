@@ -12,6 +12,7 @@ if [[ -f "$CONFIG_DIR/vault-password.txt" ]]; then
       --vault-password-file \
       "vault-password.txt" \
       "main.yaml" \
+      --syntax-check
 else
   ansible-playbook \
       -K \
@@ -19,4 +20,5 @@ else
       --extra-vars \
       "@values.yaml" \
       "main.yaml" \
+      --syntax-check
 fi
