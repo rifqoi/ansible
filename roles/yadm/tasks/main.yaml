@@ -7,4 +7,8 @@
 
 - name: Yadm clone
   ansible.builtin.command:
-    cmd: "yadm clone {{ dotfiles_url }}"
+    cmd: "yadm clone {{ dotfiles_url_https }}"
+
+- name: change yadm remote url
+  ansible.builtin.command:
+    cmd: "yadm remote set-url origin {{ dotfiles_url_ssh }}"
