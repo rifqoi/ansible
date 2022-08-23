@@ -1,0 +1,42 @@
+- name: Ensure fonts directory
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.fonts"
+    state: directory
+
+- name: Jet Brains exists
+  ansible.builtin.shell:
+    cmd: "ls {{ ansible_user_dir }}/.fonts/Jet*Brains*"
+  register: jetbrains_exists
+  ignore_errors: yes
+
+- name: Download jet brains
+  when: jetbrains_exists is failed
+  ansible.builtin.unarchive:
+    src: https://github.com/ryanoasis/nerd-fonts/releases/download/2.2.0-RC/JetBrainsMono.zip
+    dest: "{{ ansible_user_dir }}/.fonts/"
+    remote_src: yes
+
+- name: Ubuntu font exists
+  ansible.builtin.shell:
+    cmd: "ls {{ ansible_user_dir }}/.fonts/*Ubuntu*"
+  register: ubuntu_exists
+  ignore_errors: yes
+
+- name: Download ubuntu fonts
+  when: ubuntu_exists is failed
+  ansible.builtin.unarchive:
+    src: https://github.com/ryanoasis/nerd-fonts/releases/download/2.2.0-RC/Ubuntu.zip
+    dest: "{{ ansible_user_dir }}/.fonts/"
+    remote_src: yes
+
+- name: material_design font exists
+  ansible.builtin.shell:
+    cmd: "ls {{ ansible_user_dir }}/.fonts/*material-design*"
+  register: material_design_exists
+  ignore_errors: yes
+# - name: Download material_design fonts
+#   when: material_design_exists is failed
+#   ansible.builtin.unarchive:
+#     src: https://github.com/google/material-design-icons/archive/refs/tags/4.0.0.zip
+#     dest: "{{ ansible_user_dir }}/.fonts/"
+#     remote_src: yes

@@ -1,7 +1,9 @@
 default_roles:
   - yadm
   - fzf
+  - fonts
   - zsh
+  - tmux
   - git
   - neovim
   - ssh

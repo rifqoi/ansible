@@ -1,0 +1,41 @@
+- name: Check plugin directory exists
+  ansible.builtin.stat:
+    path: "{{ ansible_user_dir }}/.config/tmux/plugins"
+  register: dir_exists
+
+- name: Create plugin directory
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.config/tmux/plugins"
+    state: directory
+    mode: "0755"
+  when: dir_exists.stat.exists == False
+
+- name: Clone tpm
+  ansible.builtin.git:
+    clone: yes
+    dest: "{{ ansible_user_dir }}/.config/tmux/plugins/tpm"
+    repo: https://github.com/tmux-plugins/tpm
+
+- name: clone tmux-sensible
+  ansible.builtin.git:
+    clone: yes
+    dest: "{{ ansible_user_dir }}/.config/tmux/plugins/tpm/tmux-sensible"
+    repo: https://github.com/tmux-plugins/tmux-sensible
+
+- name: clone tmux-ressurect
+  ansible.builtin.git:
+    clone: yes
+    dest: "{{ ansible_user_dir }}/.config/tmux/plugins/tpm/tmux-resurrect"
+    repo: https://github.com/tmux-plugins/tmux-resurrect
+
+- name: clone tmux-mighty-scroll
+  ansible.builtin.git:
+    clone: yes
+    dest: "{{ ansible_user_dir }}/.config/tmux/plugins/tpm/tmux-mighty-scroll"
+    repo: https://github.com/noscript/tmux-mighty-scroll
+
+- name: clone tmux-pain-control
+  ansible.builtin.git:
+    clone: yes
+    dest: "{{ ansible_user_dir }}/.config/tmux/plugins/tpm/tmux-pain-control"
+    repo: https://github.com/tmux-plugins/tmux-pain-control
