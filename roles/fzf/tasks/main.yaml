@@ -1,0 +1,8 @@
+- name: Clone fzf
+  ansible.builtin.git:
+    repo: "https://github.com/junegunn/fzf.git"
+    dest: "{{ ansible_user_dir }}/.fzf"
+
+- name: Install fzf
+  ansible.builtin.command:
+    cmd: "{{ ansible_user_dir }}/.fzf/install"
