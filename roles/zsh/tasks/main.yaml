@@ -1,0 +1,70 @@
+- name: Install zsh
+  ansible.builtin.package:
+    name: zsh
+    state: latest
+  become: yes
+  tags:
+    - install
+
+- name: Check that the somefile.conf exists
+  stat:
+    path: "{{ ansible_user_dir }}/.oh-my-zsh"
+  register: oh_my_stats
+
+- name: Clone oh my zsh
+  ansible.builtin.git:
+    clone: yes
+    dest: "{{ ansible_user_dir }}/.oh-my-zsh"
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+  when: oh_my_stats.stat.exists == False
+
+- name: Check that .zshrc exists
+  ansible.builtin.stat:
+    path: "{{ ansible_user_dir }}/.zshrc"
+  register: zshrc_stats
+
+- name: Copy omz zshrc template if zshrc does not exists
+  ansible.builtin.copy:
+    src: "{{ ansible_user_dir }}/.oh-my-zsh/templates/zshrc.zsh-template"
+    dest: "{{ ansible_user_dir }}/.zshrc"
+  when: zshrc_stats.stat.exists == False
+
+- name: Change shell to zsh
+  ansible.builtin.shell:
+    cmd: "chsh -s `which zsh`"
+
+- name: install zsh-autosuggestions
+  ansible.builtin.git:
+    repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
+    dest: "{{ ansible_user_dir }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+
+- name: install zsh-syntax-highlighting
+  ansible.builtin.git:
+    repo: "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+    dest: "{{ ansible_user_dir }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+
+- name: install zsh-completions
+  ansible.builtin.git:
+    repo: "https://github.com/clarketm/zsh-completions"
+    dest: "{{ ansible_user_dir }}/.oh-my-zsh/custom/plugins/zsh-completions"
+
+- name: install zsh-vi-mode
+  ansible.builtin.git:
+    repo: "https://github.com/jeffreytse/zsh-vi-mode"
+    dest: "{{ ansible_user_dir }}/.oh-my-zsh/custom/plugins/zsh-vi-mode"
+
+- name: install conda-zsh-completion
+  ansible.builtin.git:
+    repo: "https://github.com/esc/conda-zsh-completion"
+    dest: "{{ ansible_user_dir }}/.oh-my-zsh/custom/custom/plugins/conda-zsh-completion"
+
+- name: Download starship install script
+  ansible.builtin.get_url:
+    url: https://starship.rs/install.sh
+    dest: /tmp/install.sh
+    mode: "0777"
+
+- name: Install starship
+  ansible.builtin.command:
+    cmd: sh /tmp/install.sh -y
+  become: yes
