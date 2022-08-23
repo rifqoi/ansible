@@ -1,0 +1,7 @@
+git_user_email: <EMAIL>
+git_user_name: <USERNAME>
+dotfiles_url: <URL>
+exclude_roles:
+  - neovim
+  - git
+
