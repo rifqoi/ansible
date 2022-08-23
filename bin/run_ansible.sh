@@ -4,7 +4,7 @@
 ansible-galaxy install -r requirements.yaml
 
 # Run playbook
-if [[ -f "$CONFIG_DIR/vault-password.txt" ]]; then
+if [[ -f "vault-password.txt" ]]; then
   ansible-playbook \
       --diff \
       --extra-vars \
@@ -12,6 +12,7 @@ if [[ -f "$CONFIG_DIR/vault-password.txt" ]]; then
       --vault-password-file \
       "vault-password.txt" \
       "main.yaml" \
+      "$@"
 else
   ansible-playbook \
       -K \
@@ -19,4 +20,5 @@ else
       --extra-vars \
       "@values.yaml" \
       "main.yaml" \
+      "$@"
 fi
