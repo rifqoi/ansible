@@ -14,5 +14,5 @@ FROM base
 COPY . ansible
 WORKDIR ./ansible
 RUN ansible-galaxy install -r requirements.yaml
-RUN ["ansible-playbook", "-K", "--diff", "--extra-vars", "@values.yaml", "main.yaml"]
+RUN ["./bin/run_ansible.sh"]
 CMD ["zsh"]
