@@ -1,0 +1,10 @@
+- name: Download and install yadm binary
+  ansible.builtin.get_url:
+    url: https://github.com/TheLocehiliosan/yadm/raw/master/yadm
+    dest: /usr/local/bin/yadm
+    mode: "0777"
+  become: yes
+
+- name: Yadm clone
+  ansible.builtin.command:
+    cmd: "yadm clone {{ dotfiles_url }}"
