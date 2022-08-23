@@ -56,7 +56,7 @@
 - name: install conda-zsh-completion
   ansible.builtin.git:
     repo: "https://github.com/esc/conda-zsh-completion"
-    dest: "{{ ansible_user_dir }}/.oh-my-zsh/custom/custom/plugins/conda-zsh-completion"
+    dest: "{{ ansible_user_dir }}/.oh-my-zsh/custom/plugins/conda-zsh-completion"
 
 - name: Download starship install script
   ansible.builtin.get_url:
