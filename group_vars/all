@@ -4,3 +4,4 @@ default_roles:
   - zsh
   - git
   - neovim
+  - ssh
