@@ -1,0 +1,116 @@
+- name: check is luarocks installed
+  shell: command -v luarocks
+  register: luarocks_exists
+  ignore_errors: yes
+
+- name: Install luarocks
+  when: luarocks_exists is failed
+  ansible.builtin.package:
+    name: luarocks
+    state: latest
+  become: yes
+
+- name: check is lua-format installed
+  shell: command -v lua-format
+  register: lua-format_exists
+  ignore_errors: yes
+
+- name: install lua-format
+  when: lua-format_exists is failed
+  ansible.builtin.command:
+    cmd: "luarocks install --server=https://luarocks.org/dev luaformatter"
+  become: yes
+
+- name: check is prettierd installed
+  shell: command -v prettierd
+  register: prettierd_exists
+  ignore_errors: yes
+
+- name: install prettierd
+  when: prettierd_exists is failed
+  ansible.builtin.command:
+    cmd: npm install -g @fsouza/prettierd
+  become: yes
+
+- name: check is black installed
+  shell: command -v black
+  register: black_exists
+  ignore_errors: yes
+
+- name: install black
+  when: black_exists is failed
+  ansible.builtin.command:
+    cmd: pip install black
+
+- name: check is black installed
+  shell: command -v black
+  register: black_exists
+  ignore_errors: yes
+
+- name: install black
+  when: black_exists is failed
+  ansible.builtin.command:
+    cmd: pip install black
+
+- name: check is sumneko_lua installed
+  shell: command -v sumneko_lua
+  register: sumneko_lua_exists
+  ignore_errors: yes
+
+- name: Setup sumneko lua lsp
+  when: sumneko_lua_exists is failed
+  ansible.builtin.git:
+    repo: "git@github.com:sumneko/lua-language-server.git"
+    recursive: yes
+    dest: "{{ ansible_user_dir }}/.config/lua-language-server"
+
+- name: build the damn sumneko deez lsp
+  when: sumneko_lua_exists is failed
+  ansible.builtin.command:
+    cmd: "{{ ansible_user_dir }}/.config/lua-language-server/3rd/luamake/compile/install.sh"
+
+- name: Finish the dude off with the built
+  when: sumneko_lua_exists is failed
+  ansible.builtin.command:
+    cmd: "{{ ansible_user_dir }}/.config/lua-language-server/3rd/luamake/compile/luamake rebuild"
+
+- name: check is gopls installed
+  shell: command -v gopls
+  register: gopls_exists
+  ignore_errors: yes
+
+- name: install gopls
+  when: gopls_exists is failed
+  ansible.builtin.command:
+    cmd: go install golang.org/x/tools/gopls@latest
+
+- name: check is tsserver installed
+  shell: command -v tsserver
+  register: tsserver_exists
+  ignore_errors: yes
+
+- name: install tsserver
+  when: tsserver_exists is failed
+  ansible.builtin.command:
+    cmd: npm install -g typescript-language-server typescript
+  become: yes
+
+- name: install html lsp
+  ansible.builtin.command:
+    cmd: npm i -g vscode-langservers-extracted
+  become: yes
+
+- name: install dockerls
+  ansible.builtin.command:
+    cmd: npm install -g dockerfile-language-server-nodejs
+  become: yes
+
+- name: install sqls
+  ansible.builtin.command:
+    cmd: go get github.com/lighttiger2505/sqls
+
+- name: install terraform_lsp
+  ansible.builtin.unarchive:
+    src: https://github.com/juliosueiras/terraform-lsp/releases/download/v0.0.12/terraform-lsp_0.0.12_linux_amd64.tar.gz
+    dest: "{{ ansible_user_dir }}/.local/bin"
+    remote_src: yes
