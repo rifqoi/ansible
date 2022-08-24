@@ -1,0 +1,11 @@
+- name: install gvm
+  ansible.builtin.command:
+    cmd: "bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)"
+
+- name: install golang with gvm
+  ansible.builtin.command:
+    cmd: gvm install go1.9
+
+- name: change default go with gvm
+  ansible.builtin.command:
+    cmd: gvm use go1.9 [--default]
