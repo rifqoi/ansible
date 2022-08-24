@@ -34,9 +34,51 @@
     cmd: "ls {{ ansible_user_dir }}/.fonts/*material-design*"
   register: material_design_exists
   ignore_errors: yes
-# - name: Download material_design fonts
-#   when: material_design_exists is failed
-#   ansible.builtin.unarchive:
-#     src: https://github.com/google/material-design-icons/archive/refs/tags/4.0.0.zip
-#     dest: "{{ ansible_user_dir }}/.fonts/"
-#     remote_src: yes
+
+- name: Download material_design fonts 1
+  when: material_design_exists is failed
+  ansible.builtin.get_url:
+    url: https://github.com/google/material-design-icons/raw/master/font/MaterialIcons-Regular.ttf
+    dest: "{{ ansible_user_dir }}/.fonts/"
+    mode: "0777"
+
+- name: Download material_design fonts 2
+  when: material_design_exists is failed
+  ansible.builtin.get_url:
+    url: https://github.com/google/material-design-icons/blob/master/font/MaterialIconsOutlined-Regular.otf
+    dest: "{{ ansible_user_dir }}/.fonts/"
+    mode: "0777"
+
+- name: Download material_design fonts 3
+  when: material_design_exists is failed
+  ansible.builtin.get_url:
+    url: https://github.com/google/material-design-icons/blob/master/font/MaterialIconsRound-Regular.otf
+    dest: "{{ ansible_user_dir }}/.fonts/"
+    mode: "0777"
+
+- name: Download material_design fonts 4
+  when: material_design_exists is failed
+  ansible.builtin.get_url:
+    url: https://github.com/google/material-design-icons/blob/master/font/MaterialIconsSharp-Regular.otf
+    dest: "{{ ansible_user_dir }}/.fonts/"
+    mode: "0777"
+
+- name: Download material_design fonts 4
+  when: material_design_exists is failed
+  ansible.builtin.get_url:
+    url: https://github.com/google/material-design-icons/blob/master/font/MaterialIconsTwoTone-Regular.otf
+    dest: "{{ ansible_user_dir }}/.fonts/"
+    mode: "0777"
+
+- name: Iosevka Mayukai Serif exists
+  ansible.builtin.shell:
+    cmd: "ls {{ ansible_user_dir }}/.fonts/*iosevka-mayukai*"
+  register: iosevka_exists
+  ignore_errors: yes
+
+- name: Download iosevka mayukai serif
+  when: iosevka_exists is failed
+  ansible.builtin.unarchive:
+    src: https://github.com/Iosevka-Mayukai/Iosevka-Mayukai/releases/download/v5.8.8/iosevka-mayukai-serif-terminal-v588.zip
+    dest: "{{ ansible_user_dir }}/.fonts/"
+    remote_src: yes
