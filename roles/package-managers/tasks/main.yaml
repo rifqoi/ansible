@@ -1,0 +1,21 @@
+- name: check is npm installed
+  shell: command -v npm
+  register: npm_exists
+  ignore_errors: yes
+
+- name: Install npm
+  when: npm_exists is failed
+  ansible.builtin.package:
+    name: npm
+    state: latest
+  become: yes
+
+- name: check is pip installed
+  shell: command -v pip
+  register: pip_exists
+  ignore_errors: yes
+
+- name: Install pip
+  when: pip_exists is failed
+  ansible.builtin.command:
+    cmd: python -m ensurepip --upgrade
