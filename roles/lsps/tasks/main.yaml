@@ -10,16 +10,16 @@
     state: latest
   become: yes
 
-- name: check is lua-format installed
-  shell: command -v lua-format
-  register: lua-format_exists
-  ignore_errors: yes
+# - name: check is lua-format installed
+#   shell: command -v lua-format
+#   register: lua_format_exists
+#   ignore_errors: yes
 
-- name: install lua-format
-  when: lua-format_exists is failed
-  ansible.builtin.command:
-    cmd: "luarocks install --server=https://luarocks.org/dev luaformatter"
-  become: yes
+# - name: install lua-format
+#   when: lua_format_exists is failed
+#   ansible.builtin.command:
+#     cmd: "luarocks install --server=https://luarocks.org/dev luaformatter"
+#   become: yes
 
 - name: check is prettierd installed
   shell: command -v prettierd

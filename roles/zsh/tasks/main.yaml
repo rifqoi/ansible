@@ -16,7 +16,7 @@
     clone: yes
     dest: "{{ ansible_user_dir }}/.oh-my-zsh"
     repo: https://github.com/ohmyzsh/ohmyzsh.git
-  when: oh_my_stats.stat.exists == False
+  when: not oh_my_stats.stat.exists
 
 - name: Check that .zshrc exists
   ansible.builtin.stat:
@@ -27,11 +27,16 @@
   ansible.builtin.copy:
     src: "{{ ansible_user_dir }}/.oh-my-zsh/templates/zshrc.zsh-template"
     dest: "{{ ansible_user_dir }}/.zshrc"
-  when: zshrc_stats.stat.exists == False
+  when: not zshrc_stats.stat.exists
+
+- name: Change required to sufficient in /etc/pam.d/chsh
+  ansible.builtin.command:
+    cmd: sed s/required/sufficient/g -i /etc/pam.d/chsh
+  become: yes
 
 - name: Change shell to zsh
   ansible.builtin.shell:
-    cmd: "chsh -s `which zsh`"
+    cmd: "chsh -s `which zsh` `whoami`"
 
 - name: install zsh-autosuggestions
   ansible.builtin.git:

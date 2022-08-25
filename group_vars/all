@@ -1,12 +1,12 @@
 default_roles:
-  - package-managers
-  - go
+  - git
   - yadm
+  - package-managers
+  - lsps
+  - go
   - fzf
   - fonts
   - zsh
   - tmux
-  - git
   - neovim
-  - lsps
   - ssh

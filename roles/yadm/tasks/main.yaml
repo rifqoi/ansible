@@ -2,12 +2,45 @@
   ansible.builtin.get_url:
     url: https://github.com/TheLocehiliosan/yadm/raw/master/yadm
     dest: /usr/local/bin/yadm
+    dest: ~/.local/bin
     mode: "0777"
   become: yes
+  when: ansible_facts["distribution"] != "Ubuntu"
 
-- name: Yadm clone
+- name: Apt-get update
+  ansible.builtin.apt:
+    upgrade: yes
+    update_cache: yes
+  become: yes
+  when: ansible_facts['distribution'] == "Ubuntu"
+
+- name: install yadm
+  ansible.builtin.package:
+    name: yadm
+    state: latest
+  become: yes
+  when: ansible_facts["distribution"] == "Ubuntu"
+
+- name: Check yadm repo exists
+  ansible.builtin.stat:
+    path: "{{ ansible_user_dir }}/.local/share/yadm/repo.git"
+  register: yadm_exists
+
+- name: Yadm clone if not exists
   ansible.builtin.command:
-    cmd: "yadm clone {{ dotfiles_url_https }}"
+    cmd: "yadm clone {{ dotfiles_url_https }} -b main"
+  when: yadm_exists.stat.exists == False
+
+- name: Yadm clone if exists
+  ansible.builtin.command:
+    cmd: "yadm clone {{ dotfiles_url_https }} -f -b main"
+  when: yadm_exists.stat.exists == True
+
+- name: Yadm checkout
+  ansible.builtin.command:
+    cmd: 'yadm checkout "{{ lookup(''env'', ''HOME'') }}"'
+  when: yadm_exists.stat.exists == True
+  ignore_errors: yes
 
 - name: change yadm remote url
   ansible.builtin.command:

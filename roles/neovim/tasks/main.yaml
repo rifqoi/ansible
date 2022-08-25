@@ -19,6 +19,7 @@
   ansible.builtin.apt:
     upgrade: yes
     update_cache: yes
+  become: yes
   when: ansible_facts['distribution'] == "Ubuntu"
 
 - name: Install or update neovim
