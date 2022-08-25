@@ -10,9 +10,17 @@ RUN apt-get update && \
     apt-get clean autoclean && \
     apt-get autoremove --yes
 
-FROM base
+FROM base AS user
+ARG TAGS
+RUN addgroup --gid 1000 rifqoi
+RUN adduser --gecos rifqoi --uid 1000 --gid 1000 --disabled-password rifqoi
+RUN usermod -aG sudo rifqoi
+RUN echo "rifqoi:pass" | chpasswd
+USER rifqoi
+WORKDIR /home/rifqoi
+
+FROM user
 COPY . ansible
 WORKDIR ./ansible
 RUN ansible-galaxy install -r requirements.yaml
-RUN ["./bin/run_ansible.sh"]
-CMD ["zsh"]
+CMD ["ansible-playbook", "-K", "--diff", "-v", "--extra-vars", "@values.yaml", "main.yaml"]
