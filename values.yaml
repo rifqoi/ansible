@@ -3,9 +3,9 @@ git_user_name: rifqoi
 dotfiles_url_https: https://github.com/rifqoi/dotfiles.git
 dotfiles_url_ssh: git@github.com:rifqoi/dotfiles.git
 exclude_roles:
-  - neovim
-  - git
-  - zsh
+  - lsps
+  - package-managers
+  - go
 
 ssh_key:
   github.pub: !vault |
